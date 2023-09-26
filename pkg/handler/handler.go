@@ -1,10 +1,17 @@
 package handler
 
 import (
+	ser "to-doProjectGo/pkg/service"
+
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
+	services *ser.Service
+}
+
+func NewHandler(service *ser.Service) *Handler {
+	return &Handler{services: service}
 }
 
 func (h *Handler) ThisRouter() *gin.Engine {
