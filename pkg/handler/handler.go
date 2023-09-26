@@ -1,0 +1,41 @@
+package handler
+
+import (
+	"github.com/gin-gonic/gin"
+)
+
+type Handler struct {
+}
+
+func (h *Handler) ThisRouter() *gin.Engine {
+
+	router := gin.New()
+
+	entr := router.Group("/entr")
+	{
+		entr.POST("/sign-up", h.SignUp)
+		entr.POST("/sign-in", h.SignIn)
+	}
+	api := entr.Group("/api")
+	{
+		lists := api.Group("/lists")
+		{
+			lists.POST("/", h.createLists)
+			lists.GET("/", h.getAllLists)
+			lists.GET("/:id", h.getListsId)
+			lists.PUT("/:id", h.putLists)
+			lists.DELETE("/:id", h.deleteLists)
+
+			items := lists.Group("/:id")
+			{
+				items.POST("/", h.createItems)
+				items.GET("/", h.getAllItems)
+				items.GET("/:items-id", h.getItemsId)
+				items.PUT("/:items-id", h.putItems)
+				items.DELETE("/:items-id", h.deleteItems)
+
+			}
+		}
+	}
+	return router
+}
