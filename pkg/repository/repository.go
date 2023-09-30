@@ -1,5 +1,7 @@
 package repository
 
+import "github.com/jmoiron/sqlx"
+
 type Entering interface {
 }
 
@@ -15,6 +17,6 @@ type Repository struct {
 	ToDoList
 }
 
-func Repositories() *Repository {
+func Repositories(db *sqlx.DB) *Repository {
 	return &Repository{}
 }
