@@ -1,26 +1,8 @@
 package todoprojectgo
 
-type ToDoList struct {
-	Id          int    `json: "id"`
-	Title       int    `json: "title"`
-	Description string `json: "description"`
-}
-
-type UserList struct {
-	Id     int
-	UserId int
-	ListId int
-}
-
-type ToDoItem struct {
-	Id          int    `json: "id"`
-	Title       int    `json: "title"`
-	Description string `json: "description"`
-	Done        bool   `json: "done"`
-}
-
-type ListItem struct {
-	Id       int
-	ListItem int
-	ItemId   int
+type User struct {
+	Id       int    `json: "-"`
+	Name     string `json: "name" binding: "requires"`
+	UserName string `json: "username" binding: "requires"`
+	Password string `json: "password" binding: "requires"`
 }
