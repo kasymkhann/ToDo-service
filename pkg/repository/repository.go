@@ -1,8 +1,13 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	user "to-doProjectGo"
+
+	"github.com/jmoiron/sqlx"
+)
 
 type Entering interface {
+	CreateUser(user user.User) (int, error)
 }
 
 type ToDoList interface {
@@ -18,5 +23,7 @@ type Repository struct {
 }
 
 func Repositories(db *sqlx.DB) *Repository {
-	return &Repository{}
+	return &Repository{
+		Entering: EntrPostgresRepo(db),
+	}
 }

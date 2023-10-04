@@ -1,8 +1,12 @@
 package service
 
-import "to-doProjectGo/pkg/repository"
+import (
+	user "to-doProjectGo"
+	"to-doProjectGo/pkg/repository"
+)
 
 type Entering interface {
+	CreateUser(user user.User) (int, error)
 }
 
 type ToDoList interface {
@@ -18,5 +22,7 @@ type Service struct {
 }
 
 func Servic(r *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Entering: EnteringService(r.Entering),
+	}
 }
