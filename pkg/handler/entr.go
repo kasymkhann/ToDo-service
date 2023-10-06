@@ -24,6 +24,25 @@ func (h *Handler) SignIn(c *gin.Context) {
 	})
 }
 
+type SignInInput struct {
+	UserName string `json: "username" binding: "requires"`
+	Password string `json: "password" binding: "requires"`
+}
+
 func (h *Handler) SignUp(c *gin.Context) {
+	var input SignInInput
+
+	if err := c.BindJSON(&input); err != nil {
+		NewErrorRespons(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	token, err := h.services.Entering.GenerateTOKEN(input.UserName, input.Password)
+	if err != nil {
+		NewErrorRespons(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"token": token,
+	})
 
 }

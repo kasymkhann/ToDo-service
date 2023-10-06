@@ -8,6 +8,7 @@ import (
 
 type Entering interface {
 	CreateUser(user user.User) (int, error)
+	GetUser(username, password string) (user.User, error)
 }
 
 type ToDoList interface {

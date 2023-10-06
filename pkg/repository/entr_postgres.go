@@ -25,3 +25,13 @@ func (e EntrPostgres) CreateUser(user user.User) (int, error) {
 	}
 	return 0, nil
 }
+
+func (e *EntrPostgres) GetUser(username, password string) (user.User, error) {
+	var user user.User
+
+	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password_hash=$2", userTable)
+	err := e.db.Get(&user, query, username, password)
+
+	return user, err
+
+}
