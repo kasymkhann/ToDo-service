@@ -2,8 +2,10 @@ package service
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"time"
+
 	user "to-doProjectGo"
 	"to-doProjectGo/pkg/repository"
 
@@ -23,6 +25,29 @@ type EntrService struct {
 type tokenClaims struct {
 	jwt.StandardClaims
 	userId int "user_id"
+}
+
+type AuthService struct {
+	r repository.Entering
+}
+
+func (c *AuthService) ParseToken(accessToken string) (int, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid signing method")
+		}
+		return []byte(signInKey), nil
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	claims, ok := token.Claims.(*tokenClaims)
+	if !ok {
+		return 0, errors.New("token claims are not of type *tokenlaims")
+	}
+	return claims.userId, nil
+
 }
 
 func EnteringService(r repository.Entering) *EntrService {

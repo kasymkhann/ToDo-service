@@ -8,6 +8,7 @@ import (
 type Entering interface {
 	CreateUser(user user.User) (int, error)
 	GenerateTOKEN(username, password string) (string, error)
+	ParseToken(accessToken string) (int, error)
 }
 
 type ToDoList interface {
@@ -24,6 +25,6 @@ type Service struct {
 
 func Servic(r *repository.Repository) *Service {
 	return &Service{
-		Entering: EnteringService(r),
+		EntrService: Entering(r.Entering),
 	}
 }
