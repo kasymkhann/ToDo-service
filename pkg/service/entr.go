@@ -27,11 +27,7 @@ type tokenClaims struct {
 	userId int "user_id"
 }
 
-type AuthService struct {
-	r repository.Entering
-}
-
-func (c *AuthService) ParseToken(accessToken string) (int, error) {
+func (e *EntrService) ParseToken(accessToken string) (int, error) {
 	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")

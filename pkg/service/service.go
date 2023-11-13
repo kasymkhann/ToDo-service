@@ -25,6 +25,6 @@ type Service struct {
 
 func Servic(r *repository.Repository) *Service {
 	return &Service{
-		EntrService: Entering(r.Entering),
+		Entering: EnteringService(r.Entering),
 	}
 }
