@@ -4,6 +4,8 @@ import (
 	user "to-doProjectGo"
 
 	"github.com/jmoiron/sqlx"
+
+	todo "to-doProjectGo"
 )
 
 type Entering interface {
@@ -12,6 +14,9 @@ type Entering interface {
 }
 
 type ToDoList interface {
+	Create(userId int, list todo.ToDoList) (int, error)
+	GetAll(userId int) ([]todo.ToDoList, error)
+	GetById(userId, listId int) (todo.ToDoList, error)
 }
 
 type ToDoItem interface {
@@ -26,5 +31,6 @@ type Repository struct {
 func Repositories(db *sqlx.DB) *Repository {
 	return &Repository{
 		Entering: EntrPostgresRepo(db),
+		ToDoList: TodoListPostgresqlRepo(db),
 	}
 }
