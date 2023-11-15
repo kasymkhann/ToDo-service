@@ -2,6 +2,8 @@ package repository
 
 import (
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 
@@ -49,4 +51,37 @@ func (t *TodoListPostgresql) GetById(userId, listId int) (todo.ToDoList, error) 
 	query := fmt.Sprintf(`SELECT tl.id, tl.title, tl.description FROM %s tl INER JOIN %s ul on tl.id = ul.list_id WHERE ul.user_id = $1 AND ul.list_id = $2`, todoListTable, userListTable)
 	err := t.db.Get(&list, query, userId, listId)
 	return list, err
+}
+
+func (t *TodoListPostgresql) Delete(userId, listId int) error {
+	query := fmt.Sprintf("DELETE FROM %s tl USING %s ul WHERE tl.id = ul.list_id AND ul.user_id=$1 AND ul.list_id =$2", todoListTable, userListTable)
+	_, err := t.db.Exec(query, userId, listId)
+	return err
+}
+
+func (t *TodoListPostgresql) Update(userId, ListId int, input todo.UpdateListInput) error {
+	setValue := make([]string, 0)
+	args := make([]interface{}, 0)
+	argsId := 1
+	if input.Title != nil {
+		setValue = append(setValue, fmt.Sprintf("title=$%d", argsId))
+		args = append(args, *input.Title)
+		argsId++
+	}
+	if input.Description != nil {
+		setValue = append(setValue, fmt.Sprintf("description=$%d", argsId))
+		args = append(args, *input.Description)
+		argsId++
+	}
+
+	setQuery := strings.Join(setValue, ",")
+
+	query := fmt.Sprintf("UPDATE %s tl SET FROM %s ul WHERE tl.id = ul.list_id AND ul.list_id=$%d AND ul.user_id=$%d", todoListTable, setQuery, userListTable, argsId, argsId+1)
+	args = append(args, ListId, userId)
+
+	log.Fatalf("updateQuery: %s ", query)
+	log.Fatalf("args: %s", args)
+
+	_, err := t.db.Exec(query, args...)
+	return err
 }
