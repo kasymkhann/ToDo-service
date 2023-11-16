@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
+
 	todo "to-doProjectGo"
 	"to-doProjectGo/pkg/handler"
 	"to-doProjectGo/pkg/repository"
@@ -42,9 +46,29 @@ func main() {
 	handler := handler.NewHandler(service)
 
 	srv := new(todo.Server)
-	if err := srv.Start(viper.GetString("port"), handler.ThisRouter()); err != nil {
-		log.Fatalf("Server error: %s", err.Error())
+
+	go func() {
+
+		if err := srv.Start(viper.GetString("port"), handler.ThisRouter()); err != nil {
+			log.Fatalf("Server error: %s", err.Error())
+
+		}
+	}()
+	log.Println("App started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+	log.Println("App shutting down")
+
+	if err := srv.ShutDown(context.Background()); err != nil {
+		log.Fatalf("error occured on server shutting down: %s", err.Error())
+
 	}
+	if err := db.Close(); err != nil {
+		log.Fatalf("error occured on Database connection close: %s", err.Error())
+	}
+
 }
 
 func InitConfig() error {
