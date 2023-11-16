@@ -5,9 +5,9 @@ import (
 )
 
 type ToDoList struct {
-	Id          int    `json: "id" db: "id"`
-	Title       int    `json: "title" db: "title" binding: "required"`
-	Description string `json: "description" db: "description"`
+	Id          int    `json:"id" db:"id"`
+	Title       string `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description"`
 }
 
 type UserList struct {
@@ -17,10 +17,10 @@ type UserList struct {
 }
 
 type ToDoItem struct {
-	Id          int    `json: "id" db: "id"`
-	Title       int    `json: "title" db: "title" binding: "required"`
-	Description string `json: "description" db: "description"`
-	Done        bool   `json: "done" db: "done"`
+	Id          int    `json:"id" db:"id"`
+	Title       int    `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description"`
+	Done        bool   `json:"done" db:"done"`
 }
 
 type ListItem struct {
