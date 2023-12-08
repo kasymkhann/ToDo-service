@@ -24,7 +24,7 @@ func (t *TodoListPostgresql) Create(userId int, list todo.ToDoList) (int, error)
 		return 0, err
 	}
 	var id int
-	createListQuery := fmt.Sprintf("INSERT INTO %s (title, description) VALUES ($1, $2) RETURNING id", listItemsTable)
+	createListQuery := fmt.Sprintf("INSERT INTO %s (title, description) VALUES ($1, $2) RETURNING id", todoListsTable)
 	row := tx.QueryRow(createListQuery, list.Title, list.Description)
 	if err := row.Scan(&id); err != nil {
 		tx.Rollback()

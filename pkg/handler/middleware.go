@@ -9,24 +9,24 @@ import (
 )
 
 const (
-	authorizationHeader = "Authorization"
+	authorizationHeader = "authorization"
 	userCtx             = "userId"
 )
 
 func (h *Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 	if header == "" {
-		NewErrorResponse(c, http.StatusOK, "empty auth header")
+		NewErrorResponse(c, http.StatusOK, "Empty auth header")
 		return
 	}
 
 	headerParts := strings.Split(header, "")
 	if len(headerParts) != 2 {
-		NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		NewErrorResponse(c, http.StatusUnauthorized, "Invalid auth header")
 		return
 	}
 
-	userId, err := h.services.ParseToken(headerParts[1])
+	userId, err := h.services.Entering.ParseToken(headerParts[1])
 	if err != nil {
 		NewErrorResponse(c, http.StatusUnauthorized, err.Error())
 

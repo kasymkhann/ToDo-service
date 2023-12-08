@@ -9,7 +9,7 @@ import (
 type Entering interface {
 	CreateUser(user user.User) (int, error)
 	GenerateTOKEN(username, password string) (string, error)
-	ParseToken(accessToken string) (int, error)
+	ParseToken(token string) (int, error)
 }
 
 type ToDoList interface {

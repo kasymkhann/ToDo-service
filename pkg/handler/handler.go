@@ -23,7 +23,8 @@ func (h *Handler) ThisRouter() *gin.Engine {
 		entr.POST("/sign-up", h.SignUp)
 		entr.POST("/sign-in", h.SignIn)
 	}
-	api := entr.Group("/api", h.userIdentity)
+
+	api := router.Group("/api", h.userIdentity)
 	{
 		lists := api.Group("/lists")
 		{
